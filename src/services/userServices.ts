@@ -76,10 +76,27 @@ export const updateImageUserService = async (
         throw new MissingAttributeException()
     }
 
+    let dirName = ""
+
+    switch (true) {
+        case file.mimetype.startsWith("image/"):
+            dirName = "images"
+            break
+        case file.mimetype.startsWith("file/"):
+            dirName = "files"
+            break
+        case file.mimetype.startsWith("video/"):
+            dirName = "videos"
+            break
+        default:
+            dirName = "others"
+            break
+    }
+
     const avatarUrl = [
         config.URL,
         "static",
-        String(file.destination.split("\\").pop()),
+        dirName,
         String(file.filename.split("\\").pop()),
     ].join("/")
 
